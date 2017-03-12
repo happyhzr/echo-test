@@ -3,7 +3,7 @@ package handlers
 import (
 	"strconv"
 
-	"echo-test/cookbook/twitter/models"
+	"github.com/insisthzr/echo-test/cookbook/twitter/models"
 
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"

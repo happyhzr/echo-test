@@ -1,7 +1,7 @@
 package main
 
 import (
-	"echo-test/cookbook/twitter/handlers"
+	"github.com/insisthzr/echo-test/cookbook/twitter/handlers"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"

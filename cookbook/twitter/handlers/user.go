@@ -3,7 +3,7 @@ package handlers
 import (
 	"time"
 
-	"echo-test/cookbook/twitter/models"
+	"github.com/insisthzr/echo-test/cookbook/twitter/models"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
