@@ -1,5 +1,6 @@
 package handlers
 
+/*
 import (
 	"strconv"
 
@@ -9,7 +10,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (h *Handler) CreatePost(c echo.Context) error {
+func CreatePost(c echo.Context) error {
 	user := &models.User{
 		ID: bson.ObjectIdHex(userIDFromToken(c)),
 	}
@@ -41,7 +42,7 @@ func (h *Handler) CreatePost(c echo.Context) error {
 	return c.JSON(201, post)
 }
 
-func (h *Handler) FetchPost(c echo.Context) error {
+func  FetchPost(c echo.Context) error {
 	userID := userIDFromToken(c)
 	page, _ := strconv.Atoi(c.QueryParam("page"))
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
@@ -69,3 +70,4 @@ func (h *Handler) FetchPost(c echo.Context) error {
 	return c.JSON(200, posts)
 
 }
+*/
