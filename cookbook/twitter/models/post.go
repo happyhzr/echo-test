@@ -1,14 +1,13 @@
 package models
 
 import (
-	//"os/user"
-
-	//"github.com/insisthzr/echo-test/cookbook/twitter/conf"
-	//"github.com/insisthzr/echo-test/cookbook/twitter/db"
+	"github.com/insisthzr/echo-test/cookbook/twitter/conf"
+	"github.com/insisthzr/echo-test/cookbook/twitter/db"
 
 	"gopkg.in/mgo.v2/bson"
 )
 
+//Post post
 type Post struct {
 	ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	To      string        `json:"to" bson:"to"`
@@ -16,19 +15,31 @@ type Post struct {
 	Message string        `json:"message" bson:"message"`
 }
 
-/*
-func AddPost(id bson.ObjectId,post *Post) error {
+// AddPost addpost
+func (p *Post) AddPost() error {
 	sess := db.NewDBSession()
 	defer sess.Close()
 
-	err = sess.DB(conf.DBName).C("users").FindId(user.ID).One(user)
+	err := sess.DB("twitter").C("posts").Insert(p)
 	if err != nil {
 		return err
 	}
-
-	err = db.DB("twitter").C("posts").Insert(post)
-	if err != nil {
-		return err
-	}
+	return nil
 }
-*/
+
+// FindPosts findposts
+func FindPosts(to string, page int, limit int) ([]*Post, error) {
+	posts := make([]*Post, 0)
+	sess := db.NewDBSession()
+	defer sess.Close()
+
+	err := sess.DB(conf.DBName).C("posts").
+		Find(bson.M{"to": to}).
+		Skip(page * limit).
+		Limit(limit).
+		All(&posts)
+	if err != nil {
+		return posts, err
+	}
+	return posts, nil
+}

@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/insisthzr/echo-test/cookbook/twitter/conf"
+	"github.com/insisthzr/echo-test/cookbook/twitter/controllers"
 	"github.com/insisthzr/echo-test/cookbook/twitter/db"
-	"github.com/insisthzr/echo-test/cookbook/twitter/handlers"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -31,14 +31,16 @@ func main() {
 		return c.String(200, "pong")
 	})
 
-	e.POST("/api/v1/signup", handlers.Signup)
-	e.POST("/api/v1/login", handlers.Login)
+	e.POST("/api/v1/signup", controllers.Signup)
+	e.POST("/api/v1/login", controllers.Login)
 
-	v1 := e.Group("/api/v1", middleware.JWTWithConfig(conf.JWTConfig))
+	v1 := e.Group("/api/v1", middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey: []byte(conf.SigningKey),
+	}))
 
-	v1.POST("/follow/:id", handlers.Follow)
-	//v1.POST("/posts", handlers.CreatePost)
-	//v1.POST("/feed", handlers.FetchPost)
+	v1.POST("/follow/:to", controllers.Follow)
+	v1.POST("/posts", controllers.CreatePost)
+	v1.GET("/posts", controllers.FetchPost)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

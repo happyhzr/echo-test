@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"time"
@@ -30,11 +30,13 @@ func Signup(c echo.Context) error {
 		return c.String(400, "user exist")
 	}
 
+	user.ID = bson.NewObjectId()
 	err = user.AddUser()
 	if err != nil {
 		return err
 	}
 
+	user.Password = ""
 	return c.JSON(201, user)
 }
 
@@ -44,16 +46,19 @@ func Login(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	if user.Email == "" || user.Password == "" {
+		return c.String(400, "email or password is nil")
+	}
 
 	existUser, err := models.FindUserByEmail(user.Email)
 	if err != nil {
 		return err
 	}
 	if existUser == nil {
-		return c.String(401, "user not exist")
+		return c.String(400, "user not exist")
 	}
 	if user.Password != existUser.Password {
-		return c.String(401, "email or password is incorrect")
+		return c.String(400, "email or password is incorrect")
 	}
 
 	token := jwt.New(jwt.SigningMethodHS256)
@@ -62,23 +67,27 @@ func Login(c echo.Context) error {
 	claims["id"] = existUser.ID
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
-	user.Token, err = token.SignedString([]byte(conf.SigningKey))
+	existUser.Token, err = token.SignedString([]byte(conf.SigningKey))
 	if err != nil {
 		return err
 	}
 
-	return c.JSON(200, user)
+	existUser.Password = "" // don't send password
+	return c.JSON(200, existUser)
 }
 
 func Follow(c echo.Context) error {
-	followerID := userIDFromToken(c)
-	id := c.Param("id")
+	from := userIDFromToken(c)
+	to := c.Param("to")
 
-	err := models.AddFollower(bson.ObjectIdHex(id), followerID)
+	err := models.AddFollower(bson.ObjectIdHex(to), from)
 	if err != nil {
 		return err
 	}
-	return c.NoContent(200)
+	return c.JSON(200, map[string]string{
+		"from": from,
+		"to":   to,
+	})
 }
 
 func userIDFromToken(c echo.Context) string {

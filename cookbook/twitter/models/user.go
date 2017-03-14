@@ -12,9 +12,9 @@ import (
 type User struct {
 	ID        bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Email     string        `json:"email" bson:"email"`
-	Password  string        `json:"password" bson:"password"`
+	Password  string        `json:"password,omitempty" bson:"password"`
 	Token     string        `json:"token" bson:"-"`
-	Followers []string      `json:"followers" bson:"followers"`
+	Followers []string      `json:"followers,omitempty" bson:"followers"`
 }
 
 // AddUser adduser
@@ -22,28 +22,9 @@ func (u *User) AddUser() error {
 	sess := db.NewDBSession()
 	defer sess.Close()
 
-	selector := bson.M{"email": u.Email}
-	_, err := sess.DB(conf.DBName).C("users").Upsert(selector, u)
+	err := sess.DB(conf.DBName).C("users").Insert(u)
 	return err
 }
-
-/*
-// ValidUser validuser
-func (u *User) ValidUser() (bool, error) {
-	existUser, err := FindUserByEmail(u.Email)
-	if err != nil {
-		return false, err
-	}
-	if existUser == nil {
-		return false, nil
-	}
-
-	if u.Password != existUser.Password {
-		return false, nil
-	}
-	return true, nil
-}
-*/
 
 // FindUserByEmail FindUserByEmail
 func FindUserByEmail(email string) (*User, error) {
