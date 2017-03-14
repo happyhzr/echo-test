@@ -8,12 +8,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// User user
 type User struct {
-	ID        bson.ObjectId   `json:"id" bson:"_id,omitempty"`
-	Email     string          `json:"email" bson:"email"`
-	Password  string          `json:"-" bson:"password"`
-	Token     string          `json:"token" bson:"-"`
-	Followers []bson.ObjectId `json:"followers" bson:"followers"`
+	ID        bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	Email     string        `json:"email" bson:"email"`
+	Password  string        `json:"password" bson:"password"`
+	Token     string        `json:"token" bson:"-"`
+	Followers []string      `json:"followers" bson:"followers"`
 }
 
 // AddUser adduser
@@ -64,7 +65,7 @@ func UserExist(email string) (bool, error) {
 }
 
 // AddFollower add follower
-func AddFollower(id, followerID bson.ObjectId) error {
+func AddFollower(id bson.ObjectId, followerID string) error {
 	sess := db.NewDBSession()
 	defer sess.Close()
 

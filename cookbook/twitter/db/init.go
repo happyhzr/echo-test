@@ -18,7 +18,8 @@ func InitDB() error {
 	} else {
 		mongoURI = os.Getenv("MONGODB")
 	}
-	sess, err := mgo.Dial(mongoURI)
+	var err error
+	sess, err = mgo.Dial(mongoURI)
 	if err != nil {
 		return err
 	}
@@ -37,13 +38,14 @@ func EnsureIndex() error {
 	index := mgo.Index{Key: []string{"email"},
 		Unique: true,
 	}
-	err := sess.Copy().DB("twitter").C("users").EnsureIndex(index)
+	sess := NewDBSession()
+	err := sess.DB("twitter").C("users").EnsureIndex(index)
 	return err
 }
 
 // CheckStatus check db session status.
-func CheckStatus() bool {
-	return sess.Ping() == nil
+func CheckStatus() error {
+	return sess.Ping()
 }
 
 // NewDBSession NewDBSession

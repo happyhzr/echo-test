@@ -71,7 +71,7 @@ func Follow(c echo.Context) error {
 	followerID := userIDFromToken(c)
 	id := c.Param("id")
 
-	err := models.AddFollower(bson.ObjectIdHex(id), bson.ObjectIdHex(followerID))
+	err := models.AddFollower(bson.ObjectIdHex(id), followerID)
 	if err != nil {
 		return err
 	}
