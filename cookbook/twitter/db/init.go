@@ -33,16 +33,6 @@ func InitDB() error {
 	return nil
 }
 
-// EnsureIndex create index
-func EnsureIndex() error {
-	index := mgo.Index{Key: []string{"email"},
-		Unique: true,
-	}
-	sess := NewDBSession()
-	err := sess.DB("twitter").C("users").EnsureIndex(index)
-	return err
-}
-
 // CheckStatus check db session status.
 func CheckStatus() error {
 	return sess.Ping()

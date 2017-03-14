@@ -1,10 +1,8 @@
 package controllers
 
 import (
-	"time"
-
-	"github.com/insisthzr/echo-test/cookbook/twitter/conf"
 	"github.com/insisthzr/echo-test/cookbook/twitter/models"
+	"github.com/insisthzr/echo-test/cookbook/twitter/utils"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
@@ -61,23 +59,19 @@ func Login(c echo.Context) error {
 		return c.String(400, "email or password is incorrect")
 	}
 
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = existUser.ID
-	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
-
-	existUser.Token, err = token.SignedString([]byte(conf.SigningKey))
+	token := utils.NewToken(existUser.ID.String())
+	signedString, err := utils.NewSignedString(token)
 	if err != nil {
 		return err
 	}
-
+	existUser.Token = signedString
 	existUser.Password = "" // don't send password
+
 	return c.JSON(200, existUser)
 }
 
 func Follow(c echo.Context) error {
-	from := userIDFromToken(c)
+	from := utils.UserIDFromToken(c.Get("user").(*jwt.Token))
 	to := c.Param("to")
 
 	err := models.AddFollower(bson.ObjectIdHex(to), from)
@@ -88,10 +82,4 @@ func Follow(c echo.Context) error {
 		"from": from,
 		"to":   to,
 	})
-}
-
-func userIDFromToken(c echo.Context) string {
-	user := c.Get("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	return claims["id"].(string)
 }

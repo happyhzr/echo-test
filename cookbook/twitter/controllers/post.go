@@ -4,13 +4,15 @@ import (
 	"strconv"
 
 	"github.com/insisthzr/echo-test/cookbook/twitter/models"
+	"github.com/insisthzr/echo-test/cookbook/twitter/utils"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"gopkg.in/mgo.v2/bson"
 )
 
 func CreatePost(c echo.Context) error {
-	userID := userIDFromToken(c)
+	userID := utils.UserIDFromToken(c.Get("user").(*jwt.Token))
 	post := new(models.Post)
 	err := c.Bind(post)
 	if err != nil {
@@ -31,7 +33,7 @@ func CreatePost(c echo.Context) error {
 }
 
 func FetchPost(c echo.Context) error {
-	to := userIDFromToken(c)
+	to := utils.UserIDFromToken(c.Get("user").(*jwt.Token))
 	var err error
 
 	pageStr := c.QueryParam("page")
