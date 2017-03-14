@@ -27,25 +27,39 @@ func (u *User) AddUser() error {
 	return err
 }
 
+/*
 // ValidUser validuser
 func (u *User) ValidUser() (bool, error) {
-	sess := db.NewDBSession()
-	defer sess.Close()
-
-	queryUser := new(User)
-	selector := bson.M{"email": u.Email}
-	err := sess.DB(conf.DBName).C("users").Find(selector).One(queryUser)
-	if err == mgo.ErrNotFound {
-		return false, nil
-	}
+	existUser, err := FindUserByEmail(u.Email)
 	if err != nil {
 		return false, err
 	}
-
-	if u.Password == queryUser.Password {
-		return true, nil
+	if existUser == nil {
+		return false, nil
 	}
-	return false, nil
+
+	if u.Password != existUser.Password {
+		return false, nil
+	}
+	return true, nil
+}
+*/
+
+// FindUserByEmail FindUserByEmail
+func FindUserByEmail(email string) (*User, error) {
+	sess := db.NewDBSession()
+	defer sess.Close()
+
+	existUser := new(User)
+	selector := bson.M{"email": email}
+	err := sess.DB(conf.DBName).C("users").Find(selector).One(existUser)
+	if err == mgo.ErrNotFound {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return existUser, nil
 }
 
 // UserExist check exist

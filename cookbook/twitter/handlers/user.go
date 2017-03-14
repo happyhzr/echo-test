@@ -45,18 +45,21 @@ func Login(c echo.Context) error {
 		return err
 	}
 
-	valid, err := user.ValidUser()
+	existUser, err := models.FindUserByEmail(user.Email)
 	if err != nil {
 		return err
 	}
-	if !valid {
+	if existUser == nil {
+		return c.String(401, "user not exist")
+	}
+	if user.Password != existUser.Password {
 		return c.String(401, "email or password is incorrect")
 	}
 
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.ID
+	claims["id"] = existUser.ID
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 	user.Token, err = token.SignedString([]byte(conf.SigningKey))
