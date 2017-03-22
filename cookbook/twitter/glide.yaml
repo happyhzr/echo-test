@@ -1,0 +1,13 @@
+package: github.com/insisthzr/echo-test/cookbook/twitter
+import:
+- package: github.com/dgrijalva/jwt-go
+- package: github.com/labstack/echo
+  subpackages:
+  - middleware
+- package: gopkg.in/mgo.v2
+  subpackages:
+  - bson
+testImport:
+- package: github.com/stretchr/testify
+  subpackages:
+  - assert

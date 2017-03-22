@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/insisthzr/echo-test/cookbook/twitter/db"
-
 	"github.com/insisthzr/echo-test/cookbook/twitter/utils"
+
 	"github.com/labstack/echo"
 	"github.com/stretchr/testify/assert"
 )
@@ -82,7 +82,7 @@ func TestFollow(t *testing.T) {
 	}
 
 	from := "58c75a9ff825dda245aa7aa4" // email=hello
-	to := "58c790831d41c8f869f03013"   // email=hello1
+	to := "58d21dd1ad9dce0f86b62223"   // email=hello
 
 	e := echo.New()
 	req, err := http.NewRequest("POST", "/api/v1/follow/:to", nil)
@@ -103,6 +103,6 @@ func TestFollow(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, 200, rec.Code)
+	assert.Equal(t, http.StatusOK, rec.Code)
 	t.Log("follow:", rec.Body.String())
 }
