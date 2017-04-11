@@ -22,7 +22,7 @@ func (u *User) AddUser() error {
 	sess := db.NewDBSession()
 	defer sess.Close()
 
-	err := sess.DB(conf.DBName).C("users").Insert(u)
+	err := sess.DB(conf.DB_NAME).C("users").Insert(u)
 	return err
 }
 
@@ -33,7 +33,7 @@ func FindUserByEmail(email string) (*User, error) {
 
 	existUser := new(User)
 	selector := bson.M{"email": email}
-	err := sess.DB(conf.DBName).C("users").Find(selector).One(existUser)
+	err := sess.DB(conf.DB_NAME).C("users").Find(selector).One(existUser)
 	if err == mgo.ErrNotFound {
 		return nil, nil
 	}
@@ -49,7 +49,7 @@ func UserExist(email string) (bool, error) {
 	defer sess.Close()
 
 	selector := bson.M{"email": email}
-	count, err := sess.DB(conf.DBName).C("users").Find(selector).Count()
+	count, err := sess.DB(conf.DB_NAME).C("users").Find(selector).Count()
 	if err != nil {
 		return false, err
 	}
@@ -65,7 +65,7 @@ func AddFollower(id bson.ObjectId, followerID string) error {
 	defer sess.Close()
 
 	update := bson.M{"$addToSet": bson.M{"followers": followerID}}
-	err := sess.DB(conf.DBName).C("users").UpdateId(id, update)
+	err := sess.DB(conf.DB_NAME).C("users").UpdateId(id, update)
 	if err != nil {
 		return err
 	}

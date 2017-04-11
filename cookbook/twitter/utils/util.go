@@ -19,7 +19,7 @@ func NewToken(id string) *jwt.Token {
 }
 
 func NewSignedString(token *jwt.Token) (string, error) {
-	signedString, err := token.SignedString([]byte(conf.SigningKey))
+	signedString, err := token.SignedString([]byte(conf.SIGNING_KEY))
 	if err != nil {
 		return "", err
 	}

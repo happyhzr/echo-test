@@ -7,21 +7,21 @@ import (
 )
 
 // EnsureIndex create index
-func EnsureIndex() error {
+func ensureIndex() error {
 	sess := NewDBSession()
 	defer sess.Close()
 
-	err := sess.DB(conf.DBName).C("users").EnsureIndex(mgo.Index{Key: []string{"email"},
+	err := sess.DB(conf.DB_NAME).C("users").EnsureIndexKey(mgo.Index{Key: []string{"email"},
 		Unique: true,
 	})
 	if err != nil {
 		return err
 	}
-	err = sess.DB(conf.DBName).C("posts").EnsureIndexKey("to")
+	err = sess.DB(conf.DB_NAME).C("posts").EnsureIndexKey("to")
 	if err != nil {
 		return err
 	}
-	err = sess.DB(conf.DBName).C("posts").EnsureIndexKey("from")
+	err = sess.DB(conf.DB_NAME).C("posts").EnsureIndexKey("from")
 	if err != nil {
 		return err
 	}

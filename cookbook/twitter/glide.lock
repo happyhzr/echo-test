@@ -1,10 +1,15 @@
 hash: 222046547d9f1a32a2c4b14fef69191d0a89342e854d21c5611e50ebb4444c50
-updated: 2017-03-21T21:06:24.779784781+08:00
+updated: 2017-03-24T17:31:38.889217309+08:00
 imports:
 - name: github.com/dgrijalva/jwt-go
   version: 2268707a8f0843315e2004ee4f1d021dc08baedf
+- name: github.com/garyburd/redigo
+  version: 0d253a66e6e1349f4581d6d2b300ee434ee2da9f
+  subpackages:
+  - internal
+  - redis
 - name: github.com/labstack/echo
-  version: eac431df0dbad8ba6cc313fba37f1d4275c317e8
+  version: 0d23a63a965a0f709657a4515778968542890552
   subpackages:
   - middleware
 - name: github.com/labstack/gommon
@@ -17,7 +22,7 @@ imports:
 - name: github.com/mattn/go-colorable
   version: a392f450ea64cee2b268dfaacdc2502b50a22b18
 - name: github.com/mattn/go-isatty
-  version: 57fdcb988a5c543893cc61bce354a6e24ab70022
+  version: fc9e8d8ef48496124e79ae0df75490096eccf6fe
 - name: github.com/valyala/bytebufferpool
   version: e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7
 - name: github.com/valyala/fasttemplate
@@ -28,12 +33,12 @@ imports:
   - acme
   - acme/autocert
 - name: golang.org/x/net
-  version: a6577fac2d73be281a500b310739095313165611
+  version: 3e967e1d28d2c9c06e749dc2bdc14b04df89e689
   subpackages:
   - context
   - context/ctxhttp
 - name: golang.org/x/sys
-  version: 99f16d856c9836c42d24e7ab64ea72916925fa97
+  version: 8fd966b47dbdd4faa03de0d06e3d733baeb9a1a9
   subpackages:
   - unix
 - name: gopkg.in/mgo.v2

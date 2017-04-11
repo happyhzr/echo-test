@@ -20,7 +20,7 @@ func (p *Post) AddPost() error {
 	sess := db.NewDBSession()
 	defer sess.Close()
 
-	err := sess.DB("twitter").C("posts").Insert(p)
+	err := sess.DB(conf.DB_NAME).C("posts").Insert(p)
 	if err != nil {
 		return err
 	}
@@ -33,7 +33,7 @@ func FindPosts(to string, page int, limit int) ([]*Post, error) {
 	sess := db.NewDBSession()
 	defer sess.Close()
 
-	err := sess.DB(conf.DBName).C("posts").
+	err := sess.DB(conf.DB_NAME).C("posts").
 		Find(bson.M{"to": to}).
 		Skip(page * limit).
 		Limit(limit).
